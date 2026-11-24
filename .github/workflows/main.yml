@@ -11,6 +11,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Unzip project
+        run: unzip -q -o pydm-android.zip -d project
+
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -24,9 +27,10 @@ jobs:
           gradle-version: 8.9
 
       - name: Build release APK
+        working-directory: project
         run: gradle assembleRelease --no-daemon --stacktrace
 
       - uses: actions/upload-artifact@v4
         with:
           name: PyDM-android-apk
-          path: app/build/outputs/apk/release/*.apk
+          path: project/app/build/outputs/apk/release/*.apk
